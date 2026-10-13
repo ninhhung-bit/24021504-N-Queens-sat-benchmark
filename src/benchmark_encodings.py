@@ -10,7 +10,12 @@ from nqueens_sat import build_cnf, var, validate_board
 
 
 SIZES = [4, 8, 16, 32, 64]
-ENCODINGS = ["pairwise", "seqcounter"]
+ENCODINGS = [
+    "pairwise",
+    "seqcounter",
+    "commander",
+    "product",
+]
 REPEATS = 5
 
 

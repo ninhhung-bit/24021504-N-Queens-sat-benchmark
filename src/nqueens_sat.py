@@ -1,6 +1,7 @@
 from itertools import combinations
 from time import perf_counter
 
+from pysat.card import CardEnc, EncType
 from pysat.solvers import Solver
 
 
@@ -9,21 +10,42 @@ def var(i, j, n):
     return i * n + j + 1
 
 
-def build_cnf(n):
-    """Build the CNF formula and return clauses and build time."""
+
+def build_cnf(n, encoding="pairwise"):
+    """Build the CNF formula using the selected AMO encoding."""
     if n < 1:
         raise ValueError("N must be at least 1")
 
+    encodings = {
+        "pairwise": EncType.pairwise,
+        "seqcounter": EncType.seqcounter,
+    }
+
+    if encoding not in encodings:
+        raise ValueError(
+            f"Unsupported encoding: {encoding}. "
+            f"Choose from {list(encodings)}"
+        )
+
     start = perf_counter()
     clauses = []
+    next_var = n * n + 1
 
     def add_exactly_one(variables):
+        nonlocal next_var
+
         # At least one (ALO).
         clauses.append(list(variables))
 
-        # At most one (AMO), pairwise encoding.
-        for a, b in combinations(variables, 2):
-            clauses.append([-a, -b])
+        # At most one (AMO), using the selected encoding.
+        amo = CardEnc.atmost(
+            lits=variables,
+            bound=1,
+            top_id=next_var - 1,
+            encoding=encodings[encoding],
+        )
+        clauses.extend(amo.clauses)
+        next_var = max(next_var, amo.nv + 1)
 
     # Exactly one queen in each row.
     for i in range(n):
@@ -38,12 +60,23 @@ def build_cnf(n):
 
     for i in range(n):
         for j in range(n):
-            diagonals.setdefault(("diff", i - j), []).append(var(i, j, n))
-            diagonals.setdefault(("sum", i + j), []).append(var(i, j, n))
+            diagonals.setdefault(
+                ("diff", i - j), []
+            ).append(var(i, j, n))
+            diagonals.setdefault(
+                ("sum", i + j), []
+            ).append(var(i, j, n))
 
     for cells in diagonals.values():
-        for a, b in combinations(cells, 2):
-            clauses.append([-a, -b])
+        # Diagonals need AMO, but not ALO.
+        amo = CardEnc.atmost(
+            lits=cells,
+            bound=1,
+            top_id=next_var - 1,
+            encoding=encodings[encoding],
+        )
+        clauses.extend(amo.clauses)
+        next_var = max(next_var, amo.nv + 1)
 
     build_time = perf_counter() - start
     return clauses, build_time

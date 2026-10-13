@@ -1,0 +1,3 @@
+solver,n,repeats,status,valid,solve_time_mean
+CPLEX MIP,4,5,FEASIBLE,True,0.003746840002713725
+CPLEX MIP,8,5,FEASIBLE,True,0.005445319999125786

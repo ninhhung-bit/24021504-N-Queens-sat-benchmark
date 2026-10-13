@@ -15,18 +15,29 @@ def main():
     rows = []
 
     for n in SIZES:
-        times = []
+        build_times = []
+        solve_times = []
+        total_times = []
         final_result = None
 
         for repeat in range(1, REPEATS + 1):
             result = solve_nqueens(n)
             final_result = result
-            times.append(result["time_seconds"])
+
+            build_time = result["build_time_seconds"]
+            solve_time = result["solve_time_seconds"]
+            total_time = result["time_seconds"]
+
+            build_times.append(build_time)
+            solve_times.append(solve_time)
+            total_times.append(total_time)
 
             print(
                 f"N={n:2d} | run={repeat}/{REPEATS} | "
                 f"status={result['status']} | "
-                f"time={result['time_seconds']:.6f}s"
+                f"build={build_time:.6f}s | "
+                f"solve={solve_time:.6f}s | "
+                f"total={total_time:.6f}s"
             )
 
         rows.append({
@@ -34,9 +45,12 @@ def main():
             "n": n,
             "repeats": REPEATS,
             "status": final_result["status"],
-            "mean_time_seconds": statistics.mean(times),
-            "stdev_time_seconds": (
-                statistics.stdev(times) if len(times) > 1 else 0.0
+            "build_time_mean_seconds": statistics.mean(build_times),
+            "solve_time_mean_seconds": statistics.mean(solve_times),
+            "total_time_mean_seconds": statistics.mean(total_times),
+            "solve_time_stdev_seconds": (
+                statistics.stdev(solve_times)
+                if len(solve_times) > 1 else 0.0
             ),
             "valid": final_result["status"] == "OPTIMAL",
         })

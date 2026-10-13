@@ -8,7 +8,7 @@ def solve_nqueens(n):
     if n < 1:
         raise ValueError("n must be >= 1")
 
-    start_time = time.perf_counter()
+    build_start = time.perf_counter()
     model = gp.Model("nqueens")
     model.Params.OutputFlag = 0
 
@@ -45,10 +45,13 @@ def solve_nqueens(n):
 
     model.setObjective(0, GRB.MINIMIZE)
 
+    build_time = time.perf_counter() - build_start
+    solve_start = time.perf_counter()
+
     try:
         model.optimize()
     except gp.GurobiError as exc:
-        elapsed = time.perf_counter() - start_time
+        solve_time = time.perf_counter() - solve_start
         error_message = str(exc)
 
         model.dispose()
@@ -58,12 +61,14 @@ def solve_nqueens(n):
                 "n": n,
                 "status": "LICENSE_LIMIT",
                 "solution": None,
-                "time_seconds": elapsed,
+                "build_time_seconds": build_time,
+                "solve_time_seconds": solve_time,
+                "time_seconds": build_time + solve_time,
             }
 
         raise
 
-    elapsed = time.perf_counter() - start_time
+    solve_time = time.perf_counter() - solve_start
 
     if model.Status == GRB.OPTIMAL:
         solution = [
@@ -90,7 +95,9 @@ def solve_nqueens(n):
         "n": n,
         "status": status,
         "solution": solution,
-        "time_seconds": elapsed,
+        "build_time_seconds": build_time,
+        "solve_time_seconds": solve_time,
+        "time_seconds": build_time + solve_time,
     }
 
 

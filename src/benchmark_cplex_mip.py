@@ -5,7 +5,7 @@ from statistics import mean
 from nqueens_cplex_mip import solve_nqueens
 
 
-SIZES = [4, 8]
+SIZES = [4, 8, 11]
 REPEATS = 5
 
 OUTPUT_FILE = "results/cplex_mip_baseline.csv"

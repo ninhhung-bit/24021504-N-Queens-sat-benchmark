@@ -1,11 +1,11 @@
 solver,n,status,valid,repeats,solve_time_seconds,source_file
 CPLEX CP,4,FEASIBLE,True,5,0.021905219997279346,cplex_cp_baseline.csv
-CPLEX MIP,4,FEASIBLE,True,5,0.003746840002713725,cplex_mip_baseline.csv
+CPLEX MIP,4,FEASIBLE,True,5,0.012148279993562027,cplex_mip_baseline.csv
 Glucose4,4,SAT,True,5,0.00012667999835684894,sat_baseline.csv
 Gurobi,4,OPTIMAL,True,5,7.970000442583113e-05,gurobi_baseline.csv
 OR-Tools CP-SAT,4,OPTIMAL,True,5,0.012906059998204,cp_sat_baseline.csv
 CPLEX CP,8,FEASIBLE,True,5,0.02035809999506455,cplex_cp_baseline.csv
-CPLEX MIP,8,FEASIBLE,True,5,0.005445319999125786,cplex_mip_baseline.csv
+CPLEX MIP,8,FEASIBLE,True,5,0.00944821999873966,cplex_mip_baseline.csv
 Glucose4,8,SAT,True,5,0.00027977999998256563,sat_baseline.csv
 Gurobi,8,OPTIMAL,True,5,0.00015857999678701163,gurobi_baseline.csv
 OR-Tools CP-SAT,8,OPTIMAL,True,5,0.026094259999808855,cp_sat_baseline.csv

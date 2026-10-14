@@ -230,6 +230,8 @@ def solve_nqueens(n):
         is_sat = solver.solve()
         solve_time = perf_counter() - solve_start
 
+        num_variables = solver.nof_vars()
+
         if not is_sat:
             board = None
         else:
@@ -250,7 +252,7 @@ def solve_nqueens(n):
         "n": n,
         "status": "SAT" if board is not None else "UNSAT",
         "valid": validate_board(board),
-        "variables": n * n,
+        "variables": num_variables,
         "clauses": len(clauses),
         "build_time": build_time,
         "solve_time": solve_time,

@@ -1,0 +1,6 @@
+solver,largest_successful_n,successful_sizes,non_successful_sizes
+Glucose4,64,4;8;16;32;64,
+OR-Tools CP-SAT,64,4;8;16;32;64,
+CPLEX CP,64,4;8;16;32;64,
+CPLEX MIP,8,4;8,
+Gurobi,14,4;8;14,16:LICENSE_LIMIT;32:LICENSE_LIMIT
